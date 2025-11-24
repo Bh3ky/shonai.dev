@@ -7,10 +7,10 @@ export default function ComingSoonPage() {
   const [initText, setInitText] = useState("")
   const initFullText = "INITIALIZING_"
 
-  const [typewriterText, setTypewriterText] = useState("")
-  const [showCursor, setShowCursor] = useState(true)
-  const fullText = "PERSONAL WEBSITE COMING SOON..."
   const [showGlobe, setShowGlobe] = useState(false)
+  const [showInit, setShowInit] = useState(true)
+
+  const fullText = "PERSONAL WEBSITE COMING SOON..."
 
   useEffect(() => {
     let initIndex = 0
@@ -26,28 +26,12 @@ export default function ComingSoonPage() {
     // Start globe animation after initializing text
     const startDelay = setTimeout(() => {
       setShowGlobe(true)
+      setShowInit(false)
     }, 1500)
-
-    // Typewriter effect for main message
-    const typewriterDelay = setTimeout(() => {
-      let currentIndex = 0
-      const interval = setInterval(() => {
-        if (currentIndex <= fullText.length) {
-          setTypewriterText(fullText.slice(0, currentIndex))
-          currentIndex++
-        } else {
-          clearInterval(interval)
-          setShowCursor(false)
-        }
-      }, 100)
-
-      return () => clearInterval(interval)
-    }, 4500)
 
     return () => {
       clearInterval(initInterval)
       clearTimeout(startDelay)
-      clearTimeout(typewriterDelay)
     }
   }, [])
 
@@ -75,32 +59,36 @@ export default function ComingSoonPage() {
       <div className="absolute bottom-4 left-4 text-accent/50 font-mono text-sm">[CONNECTING...]</div>
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8">
-        {/* Main content container */}
         <div className="w-full max-w-5xl mx-auto space-y-8 md:space-y-12">
-          {/* Header with typing effect */}
+
+          {/* Header */}
           <div className="text-center space-y-4">
-            <h1
-              className={`text-4xl md:text-6xl font-bold neon-text text-primary tracking-wider ${initText.length < initFullText.length ? "typewriter-cursor" : ""}`}
-            >
-              {initText}
-            </h1>
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <div className="w-2 h-2 rounded-full bg-secondary animate-pulse delay-75" />
-              <div className="w-2 h-2 rounded-full bg-accent animate-pulse delay-150" />
-            </div>
+            {showInit ? (
+              <>
+                <h1 className="text-4xl md:text-6xl font-bold neon-text text-primary tracking-wider">
+                  {initText}
+                </h1>
+
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-secondary animate-pulse delay-75" />
+                  <div className="w-2 h-2 rounded-full bg-accent animate-pulse delay-150" />
+                </div>  
+              </>
+            ) : (
+              <h1 className="text-4xl md:text-3xl font-bold neon-text text-primary tracking-wider">
+                {fullText}
+              </h1>
+            )}
           </div>
 
           {/* Globe container */}
-          <div className="relative">{showGlobe && <RetroGlobe />}</div>
-
-          {/* Typewriter message */}
-          <div className="text-center pt-4 md:pt-8">
-            <p
-              className={`text-xl md:text-3xl font-bold text-primary tracking-widest text-balance px-4 ${showCursor ? "typewriter-cursor" : ""}`}
-            >
-              {typewriterText}
-            </p>
+          <div className="relative flext justify-center">
+            {showGlobe && (
+              <div className="scale-[0.85]">
+                <RetroGlobe />
+              </div>
+            )}
           </div>
 
           {/* Bottom progress bar */}

@@ -12,8 +12,9 @@ export function RetroGlobe() {
   const [isZooming, setIsZooming] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [showGyroPrompt, setShowGyroPrompt] = useState(false)
+
   const lastGyroTime = useRef(Date.now())
-  const gyroTimeout = useRef<NodeJS.Timeout>()
+  const gyroTimeout = useRef<NodeJS.Timeout | null>(null)
 
   const requestGyroPermission = async () => {
     const handleOrientation = (event: DeviceOrientationEvent) => {
@@ -87,6 +88,7 @@ export function RetroGlobe() {
     }
   }, [])
 
+  // Rotation + ping + zoom behaviour
   useEffect(() => {
     const rotationInterval = setInterval(() => {
       if (!isGyroActive) {
@@ -94,6 +96,7 @@ export function RetroGlobe() {
       }
     }, 50)
 
+    // Ping & Wakanda reveal
     const pingTimeout = setTimeout(() => {
       setShowPing(true)
       setShowWakanda(true)
@@ -192,7 +195,7 @@ export function RetroGlobe() {
 
           <g transform={`rotate(${currentRotation} 200 200)`}>
             <path
-              d="M 200 80
+              d="M 200 80 
                 Q 220 90, 230 110
                 Q 240 130, 235 150
                 Q 230 170, 240 190
@@ -271,35 +274,20 @@ export function RetroGlobe() {
                 fill="currentColor"
                 className="text-accent animate-pulse"
               />
-
-              <line
-                x1={200 + (wakandaX - 50) * 3.6}
-                y1={200 - (wakandaY - 50) * 3.6}
-                x2={200 + (wakandaX - 50) * 3.6}
-                y2="20"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="text-accent/60"
-                strokeDasharray="5,5"
-              >
-                <animate attributeName="stroke-dashoffset" from="0" to="10" dur="0.5s" repeatCount="indefinite" />
-              </line>
             </g>
           )}
         </svg>
 
         {showWakanda && (
+          <>
           <div
             className="absolute pointer-events-none"
             style={{
-              left: `${wakandaX}%`,
-              top: `${wakandaY - 20}%`,
-              transform: "translate(-50%, -100%)",
+              left: '-25%',
+              top: '10%',
             }}
           >
             <div className="relative">
-              <div className="absolute bottom-0 left-1/2 w-0.5 h-8 bg-linear-to-b from-accent to-transparent" />
-
               <div className="bg-card/90 border-2 border-accent px-2 py-1 md:px-4 md:py-2 backdrop-blur-sm">
                 <p className="wakanda-text text-accent text-sm md:text-lg whitespace-nowrap">WAKANDA</p>
                 <p className="text-accent/70 text-[10px] md:text-xs font-mono text-center mt-0.5">[ORIGIN POINT]</p>
@@ -311,6 +299,7 @@ export function RetroGlobe() {
               <div className="absolute -bottom-1 -right-1 w-2 h-2 md:w-3 md:h-3 border-r-2 border-b-2 border-accent" />
             </div>
           </div>
+          </>
         )}
       </div>
 
