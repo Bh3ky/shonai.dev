@@ -108,15 +108,3 @@ Project structure
 ├─ tsconfig.json
 └─ TODO.md
 
-```
-
-Key files to inspect when editing
-
-- `app/layout.tsx`, `app/page.tsx` — root layout and entry page.
-- `components/ui/*` — atomic UI primitives (wrap Radix UI, Tailwind + CVA patterns).
-- `components/theme-provider.tsx` — theme and global providers (uses `next-themes`).
-- `hooks/use-toast.ts` and `components/ui/toaster.tsx` — toast notification patterns.
-- `lib/utils.ts` — shared helpers.
-
-If you'd like, I can expand any section with usage examples (e.g., how `components/ui/button.tsx` is structured), or generate a CONTRIBUTORS / PR checklist.
- 
